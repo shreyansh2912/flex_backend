@@ -55,12 +55,11 @@ exports.verifyOtp = async (req, res) => {
     await user.save();
 
     const token = jwt.sign(
-      { userId: user._id, email: user.email },  // Payload
-      process.env.JWT_SECRET,                  // Secret
-      { expiresIn: '1h' }                      // Options
+      { userId: user._id, email: user.email, name: user.name},
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
     );
 
-    // ✅ Return token in response
     return successJson(res, { token, user }, 'Login successful');
 
   } catch (err) {
