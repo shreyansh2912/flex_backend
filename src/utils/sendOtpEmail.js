@@ -1,37 +1,46 @@
-const nodemailer = require('nodemailer');
+// const fetch = require('node-fetch');
 require('dotenv').config();
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp-relay.brevo.com',
-  port: 587, // use 465 for SSL
-  secure: false, // true for port 465
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
 const sendOtpEmail = async (to, otp) => {
-  const mailOptions = {
-    from: "shreyanshshah2912@gmail.com",
-    to,
-    subject: `${otp} is the otp for your ${process.env.APP_NAME} account`,
-    html: `
-      <h2>🔐 Your OTP Code</h2>
-      <p>Your One-Time Password (OTP) is:</p>
-      <h1 style="letter-spacing: 5px;">${otp}</h1>
-      <p>This code will expire in 5 minutes. Please do not share it with anyone.</p>
-      <br/>
-      <p>Thanks,<br/>The Your App Name Team</p>
-    `
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) throw new Error('Brevo API key not configured');
+
+  const sender = {
+    email: 'shreyanshshah2912@gmail.com',
+    name: process.env.APP_NAME || 'Your App Name'
   };
 
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log(`OTP email sent to ${to}`);
-  } catch (error) {
-    console.error('Failed to send OTP email:', error);
-    throw new Error('Could not send OTP email');
+  const subject = `${otp} is the OTP for your ${process.env.APP_NAME} account`;
+
+  const htmlContent = `
+    <h2>🔐 Your OTP Code</h2>
+    <p>Your One-Time Password (OTP) is:</p>
+    <h1 style="letter-spacing: 5px;">${otp}</h1>
+    <p>This code will expire in 5 minutes. Please do not share it with anyone.</p>
+    <br/>
+    <p>Thanks,<br/>The ${process.env.APP_NAME} Team</p>
+  `;
+
+  const body = {
+    sender,
+    to: [{ email: to }],
+    subject,
+    htmlContent,
+  };
+
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'api-key': apiKey,
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Brevo API error: ${JSON.stringify(errorData)}`);
   }
 };
 
