@@ -1,7 +1,13 @@
+const { required } = require("joi");
 const mongoose = require("mongoose");
 
 const formSchema = new mongoose.Schema({
-  name: {
+  title: {
+    type: String,
+    required: true,
+  },
+
+  steps: {
     type: String,
     required: true,
   },

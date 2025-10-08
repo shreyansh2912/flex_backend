@@ -12,14 +12,27 @@ exports.getForms = async (req, res) => {
 
 exports.createForm = async (req, res) => {
   try {
-    const { title, description } = req.body;
-    const form = new Form({ title, description });
+    const { title, description, steps } = req.body;
+    const userId = req.user._id;
+    const name = req.user.name;
+
+    const form = new Form({
+      title,
+      description,
+      steps,
+      userId, // Attach the userId to the form
+    });
+
+    // Save the form
     await form.save();
+
+    // Return the response
     return successJson(res, form, 'Form created', 201);
   } catch (error) {
     return errorJson(res, error.message, 400);
   }
 };
+
 
 exports.updateForm = async (req, res) => {
   try {
