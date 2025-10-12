@@ -9,7 +9,7 @@ const successJson = (res, data = {}, message = 'Success', statusCode = 200) => {
 const errorJson = (res, error = 'Something went wrong', statusCode = 500) => {
   return res.status(statusCode).json({
     is_error: true,
-    message: error,
+    errors: error,
   });
 };
 
