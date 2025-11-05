@@ -4,9 +4,9 @@ const sendOtpSchema = Joi.object({
     email: Joi.string().required(),
 })
 
-const confirmOtpSchema = Joi.object({
+const verifyOtpSchema = Joi.object({
     email: Joi.string().required(),
     otp: Joi.string().length(6).required(),
 })
 
-module.exports = {sendOtpSchema,confirmOtpSchema}
+module.exports = {sendOtpSchema,verifyOtpSchema}
