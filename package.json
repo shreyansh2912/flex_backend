@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "[my-framework] build --output public"
   },
   "keywords": [],
   "author": "",
@@ -18,12 +19,16 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "ioredis": "^5.8.2",
     "joi": "^18.0.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1",
     "mongoose-delete": "^1.0.2",
     "morgan": "^1.10.1",
-    "nodemailer": "^7.0.6"
+    "nodemailer": "^7.0.6",
+    "react-wordcloud": "^1.2.7",
+    "redis": "^5.9.0",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

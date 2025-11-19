@@ -1,4 +1,4 @@
-const FormData = require('../models/formData.model');
+const FormData = require('../models/form.model');
 const { successJson, errorJson } = require('../utils/responseHelpers');
 
 exports.createFormData = async (req, res) => {
