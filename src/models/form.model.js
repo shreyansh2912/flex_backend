@@ -12,15 +12,28 @@ const fieldSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['text', 'email', 'number', 'textarea', 'radio', 'checkbox', 'select'],
+    enum: ['text', 'email', 'number', 'textarea', 'radio', 'checkbox', 'select', 'date', 'image'],
+  },
+  placeholder: {
+    type: String,
+    default: '',
   },
   options: {
     type: [String],
     default: undefined,
   },
-  required: {
-    type: Boolean,
-    default: false,
+  validation: {
+    required: { type: Boolean, default: false },
+    minLength: { type: Number },
+    maxLength: { type: Number },
+    pattern: { type: String },
+  },
+  layout: {
+    width: { type: String, default: '100%' }, // '100%' or '50%'
+  },
+  page: {
+    type: Number,
+    default: 1,
   },
   sequence: {
     type: Number,
@@ -36,7 +49,29 @@ const formSchema = new mongoose.Schema({
   formType: {
     type: String,
     required: true,
-    enum: ['single-page', 'multi-page'],
+    enum: ['single-step', 'multi-step'],
+  },
+  visibility: {
+    type: String,
+    enum: ['public', 'password-protected'],
+    default: 'public',
+  },
+  password: {
+    type: String, // Hashed password
+  },
+  allowedEmails: {
+    type: [String], // List of emails invited
+    default: [],
+  },
+  collectUserInfo: {
+    type: Boolean, // If true, respondent must login
+    default: false,
+  },
+  theme: {
+    primaryColor: { type: String, default: '#3b82f6' },
+    backgroundColor: { type: String, default: '#ffffff' },
+    textColor: { type: String, default: '#000000' },
+    borderRadius: { type: String, default: '4px' },
   },
   isPublic: {
     type: Boolean,

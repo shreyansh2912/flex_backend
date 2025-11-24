@@ -6,10 +6,12 @@ const userRoutes = require('./user.routes');
 const formRoutes = require('./form.routes');
 const auth = require("./auth.routes");
 const formDataRoutes = require("./formData.routes.js");
+const wordCloudRoutes = require('./wordCloud.routes');
 
-router.use("/auth",auth);
-router.use('/users',authMiddleware, userRoutes);
-router.use('/form',authMiddleware, formRoutes);
-router.use('/form-data',authMiddleware,formDataRoutes);
+router.use("/auth", auth);
+router.use('/users', authMiddleware, userRoutes);
+router.use('/form', formRoutes);
+router.use('/form-data', authMiddleware, formDataRoutes);
+router.use('/word-cloud', wordCloudRoutes);
 
-module.exports = router
+module.exports = router;
