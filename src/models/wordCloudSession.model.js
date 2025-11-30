@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 const wordCloudSessionSchema = new mongoose.Schema({
     hostId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         required: true,
     },
     status: {

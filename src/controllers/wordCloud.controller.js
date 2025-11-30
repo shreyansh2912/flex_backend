@@ -30,7 +30,29 @@ exports.getSession = async (req, res) => {
 
 exports.getMySessions = async (req, res) => {
     try {
-        const sessions = await WordCloudSession.find({ hostId: req.user._id }).sort({ createdAt: -1 });
+        const userId = req.user?._id;
+        const guestId = req.query.hostId;
+
+        let query = {};
+        if (userId && guestId) {
+            query = { $or: [{ hostId: userId.toString() }, { hostId: guestId }] };
+        } else if (userId) {
+            query = { hostId: userId.toString() };
+        } else if (guestId) {
+            query = { hostId: guestId };
+        } else {
+            return errorJson(res, 'Host ID required', 400);
+        }
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 20;
+        const skip = (page - 1) * limit;
+
+        const sessions = await WordCloudSession.find(query)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+            
         return successJson(res, sessions, 'Sessions fetched successfully');
     } catch (error) {
         return errorJson(res, error.message, 500);

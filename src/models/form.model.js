@@ -39,6 +39,11 @@ const fieldSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  logic: {
+    action: { type: String, enum: ['show', 'hide'], default: null },
+    when: { type: String, default: null }, // The name of the controlling field
+    equals: { type: String, default: null }, // The value that triggers the action
+  },
 });
 
 const formSchema = new mongoose.Schema({

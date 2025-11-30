@@ -6,7 +6,14 @@ const bcrypt = require('bcrypt');
 
 exports.getForms = async (req, res) => {
   try {
-    const forms = await Form.find({ userId: req.user._id });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const forms = await Form.find({ userId: req.user._id })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
     return successJson(res, forms, 'Fetched all forms');
   } catch (error) {
     return errorJson(res, error.message, 500);
@@ -143,7 +150,14 @@ exports.getFormSubmissions = async (req, res) => {
       return errorJson(res, 'Form not found or access denied', 404);
     }
 
-    const submissions = await Submission.find({ formId }).sort({ submittedAt: -1 });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const submissions = await Submission.find({ formId })
+      .sort({ submittedAt: -1 })
+      .skip(skip)
+      .limit(limit);
     return successJson(res, submissions, 'Submissions fetched');
   } catch (error) {
     return errorJson(res, error.message, 500);
