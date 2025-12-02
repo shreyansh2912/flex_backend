@@ -127,7 +127,7 @@ io.on('connection', (socket) => {
 
   // Helper to check if user is host
   const isHost = (session) => {
-    const userId = socket.user._id;
+    const userId = socket.user._id?.toString();
     const guestId = socket.user.guestId;
     const hostId = session.hostId.toString();
     return hostId === userId || (guestId && hostId === guestId);
@@ -354,7 +354,21 @@ io.on('connection', (socket) => {
       if (session && session.status === 'active') {
         const q = session.questions.id(questionId);
         if (q) {
-          q.upvotes += 1;
+          const userId = socket.user._id?.toString() || socket.user.guestId || socket.id;
+
+          if (!q.upvotedBy) q.upvotedBy = [];
+
+          const index = q.upvotedBy.indexOf(userId);
+          if (index > -1) {
+            // User already voted, remove vote (toggle)
+            q.upvotedBy.splice(index, 1);
+            q.upvotes = Math.max(0, q.upvotes - 1);
+          } else {
+            // Add vote
+            q.upvotedBy.push(userId);
+            q.upvotes += 1;
+          }
+
           await session.save();
           io.to(qnaId).emit('qnaUpdate', session);
         }

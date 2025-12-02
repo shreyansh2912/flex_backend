@@ -8,6 +8,7 @@ const qnaSessionSchema = new mongoose.Schema({
     questions: [{
         text: { type: String, required: true },
         upvotes: { type: Number, default: 0 },
+        upvotedBy: [{ type: String }],
         isAnswered: { type: Boolean, default: false },
         createdAt: { type: Date, default: Date.now }
     }],
