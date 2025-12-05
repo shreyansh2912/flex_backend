@@ -46,6 +46,10 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/upload', uploadRoutes);
 app.use('/api', apiRoutes);
 
+app.get('/health', (req, res) => {
+  res.sendStatus(200);
+});
+
 app.get('/', (req, res) => {
   res.status(200).send('Welcome to FLEX');
 });
